@@ -20,13 +20,17 @@ import (
 //   - This function does not return errors directly. Errors may be returned when executing the ExecDeleteAttribute.
 //   - If the attribute or object does not exist, or the server rejects the operation, an error will be returned during execution.
 func (c *Client) DeleteAttribute(id string, name kmip.AttributeName) ExecDeleteAttribute {
+	req := &payloads.DeleteAttributeRequestPayload{UniqueIdentifier: id}
+	if c.usesV2Attributes() {
+		ref := kmip.AttributeReferenceFor(name)
+		req.AttributeReference = &ref
+	} else {
+		req.AttributeName = name
+	}
 	return ExecDeleteAttribute{
 		Executor[*payloads.DeleteAttributeRequestPayload, *payloads.DeleteAttributeResponsePayload]{
 			client: c,
-			req: &payloads.DeleteAttributeRequestPayload{
-				UniqueIdentifier: id,
-				AttributeName:    name,
-			},
+			req:    req,
 		},
 	}
 }

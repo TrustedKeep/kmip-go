@@ -23,6 +23,7 @@ type reader interface {
 	TextString(tag int) (string, error)
 	ByteString(tag int) ([]byte, error)
 	DateTime(tag int) (time.Time, error)
+	DateTimeExtended(tag int) (time.Time, error)
 	Interval(tag int) (time.Duration, error)
 	Bitmask(realtag, tag int) (int32, error)
 }
@@ -147,6 +148,11 @@ func (dec *Decoder) DateTime(tag int) (time.Time, error) {
 	return dec.r.DateTime(tag)
 }
 
+// DateTimeExtended reads a microsecond-precision date-time and advance to the next value.
+func (dec *Decoder) DateTimeExtended(tag int) (time.Time, error) {
+	return dec.r.DateTimeExtended(tag)
+}
+
 // DateTime reads a duration and advance to the next value.
 func (dec *Decoder) Interval(tag int) (time.Duration, error) {
 	return dec.r.Interval(tag)
@@ -199,6 +205,10 @@ func (dec *Decoder) TagAny(tag int, value any) (err error) {
 		*v, err = dec.Interval(tag)
 	case *time.Time:
 		*v, err = dec.DateTime(tag)
+	case *DateTimeExtended:
+		var t time.Time
+		t, err = dec.DateTimeExtended(tag)
+		*v = DateTimeExtended(t)
 	case **big.Int:
 		*v, err = dec.BigInteger(tag)
 	case TagDecodable:
@@ -334,6 +344,17 @@ func buildTimeDecodeFunc() func(*Decoder, int, reflect.Value) error {
 			return err
 		}
 		value.Set(reflect.ValueOf(v))
+		return nil
+	}
+}
+
+func buildDateTimeExtendedDecodeFunc() func(*Decoder, int, reflect.Value) error {
+	return func(d *Decoder, tag int, value reflect.Value) error {
+		v, err := d.DateTimeExtended(tag)
+		if err != nil {
+			return err
+		}
+		value.Set(reflect.ValueOf(DateTimeExtended(v)))
 		return nil
 	}
 }
@@ -491,6 +512,8 @@ func decodeFunc(ty reflect.Type) func(d *Decoder, tag int, value reflect.Value) 
 		return buildDurationDecodeFunc()
 	case reflect.TypeFor[time.Time]():
 		return buildTimeDecodeFunc()
+	case reflect.TypeFor[DateTimeExtended]():
+		return buildDateTimeExtendedDecodeFunc()
 	case reflect.TypeFor[big.Int]():
 		return buildBigIntDecodeFunc()
 	}

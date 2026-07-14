@@ -61,6 +61,10 @@ func (v *Value) TagDecodeTTLV(d *Decoder, tag int) error {
 		v.Value, err = d.ByteString(tag)
 	case TypeDateTime:
 		v.Value, err = d.DateTime(tag)
+	case TypeDateTimeExtended:
+		var t time.Time
+		t, err = d.DateTimeExtended(tag)
+		v.Value = DateTimeExtended(t)
 	case TypeEnumeration:
 		var enum uint32
 		enum, err = d.Enum(0, tag)
@@ -101,6 +105,8 @@ func (v Value) TagEncodeTTLV(e *Encoder, tag int) {
 		e.ByteString(tag, val)
 	case time.Time:
 		e.DateTime(tag, val)
+	case DateTimeExtended:
+		e.DateTimeExtended(tag, time.Time(val))
 	case Enum:
 		e.Enum(0, tag, uint32(val))
 	case time.Duration:

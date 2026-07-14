@@ -32,17 +32,16 @@ type ExecCreateWantType struct {
 // Returns:
 //   - ExecCreate: An executor for the create operation, allowing further configuration or execution.
 func (ex ExecCreateWantType) Object(objectType kmip.ObjectType, attrs ...kmip.Attribute) ExecCreate {
+	req := &payloads.CreateRequestPayload{ObjectType: objectType}
+	*attrTarget(ex.client, &req.TemplateAttribute, &req.Attributes) = attrs
 	return ExecCreate{
 		AttributeExecutor[*payloads.CreateRequestPayload, *payloads.CreateResponsePayload, ExecCreate]{
 			Executor[*payloads.CreateRequestPayload, *payloads.CreateResponsePayload]{
 				client: ex.client,
-				req: &payloads.CreateRequestPayload{
-					ObjectType:        objectType,
-					TemplateAttribute: kmip.TemplateAttribute{Attribute: attrs},
-				},
+				req:    req,
 			},
 			func(crp **payloads.CreateRequestPayload) *[]kmip.Attribute {
-				return &(*crp).TemplateAttribute.Attribute
+				return attrTarget(ex.client, &(*crp).TemplateAttribute, &(*crp).Attributes)
 			},
 			func(ae AttributeExecutor[*payloads.CreateRequestPayload, *payloads.CreateResponsePayload, ExecCreate]) ExecCreate {
 				return ExecCreate{ae}

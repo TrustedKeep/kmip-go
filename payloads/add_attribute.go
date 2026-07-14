@@ -18,7 +18,11 @@ type AddAttributeRequestPayload struct {
 	// If omitted, then the ID Placeholder value is used by the server as the Unique Identifier.
 	UniqueIdentifier string `ttlv:",omitempty"`
 	// Specifies the attribute to be added as an attribute for the object.
-	Attribute kmip.Attribute
+	//
+	// Replaced by NewAttribute in KMIP 2.0.
+	Attribute kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// Specifies, in KMIP 2.0+, the attribute to be added.
+	NewAttribute kmip.NewAttribute `ttlv:"NewAttribute,omitempty,version=v2.0.."`
 }
 
 func (pl *AddAttributeRequestPayload) Operation() kmip.Operation {
@@ -30,7 +34,9 @@ type AddAttributeResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// The added attribute associated with the object.
-	Attribute kmip.Attribute
+	//
+	// Removed in KMIP 2.0: the response returns only the Unique Identifier.
+	Attribute kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
 }
 
 func (pl *AddAttributeResponsePayload) Operation() kmip.Operation {

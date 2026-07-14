@@ -19,6 +19,9 @@ const (
 	TypeByteString
 	TypeDateTime
 	TypeInterval
+	// TypeDateTimeExtended is a POSIX timestamp with microsecond precision,
+	// encoded as an 8-byte value. Introduced in KMIP 2.0.
+	TypeDateTimeExtended
 )
 
 func (ty Type) String() string {
@@ -41,16 +44,17 @@ func typeFromName(name string) (Type, bool) {
 
 var (
 	typesName = map[Type]string{
-		TypeStructure:   "Structure",
-		TypeInteger:     "Integer",
-		TypeLongInteger: "LongInteger",
-		TypeBigInteger:  "BigInteger",
-		TypeEnumeration: "Enumeration",
-		TypeBoolean:     "Boolean",
-		TypeTextString:  "TextString",
-		TypeByteString:  "ByteString",
-		TypeDateTime:    "DateTime",
-		TypeInterval:    "Interval",
+		TypeStructure:        "Structure",
+		TypeInteger:          "Integer",
+		TypeLongInteger:      "LongInteger",
+		TypeBigInteger:       "BigInteger",
+		TypeEnumeration:      "Enumeration",
+		TypeBoolean:          "Boolean",
+		TypeTextString:       "TextString",
+		TypeByteString:       "ByteString",
+		TypeDateTime:         "DateTime",
+		TypeInterval:         "Interval",
+		TypeDateTimeExtended: "DateTimeExtended",
 	}
 	nameTypes = revMap(typesName)
 )

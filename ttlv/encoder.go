@@ -20,6 +20,7 @@ type writer interface {
 	TextString(tag int, str string)
 	ByteString(tag int, str []byte)
 	DateTime(tag int, date time.Time)
+	DateTimeExtended(tag int, date time.Time)
 	Interval(tag int, interval time.Duration)
 	Bitmask(realtag, tag int, value int32)
 }
@@ -123,6 +124,11 @@ func (enc *Encoder) DateTime(tag int, date time.Time) {
 	enc.w.DateTime(tag, date)
 }
 
+// DateTimeExtended writes a microsecond-precision date-time value to the internal buffer.
+func (enc *Encoder) DateTimeExtended(tag int, date time.Time) {
+	enc.w.DateTimeExtended(tag, date)
+}
+
 // Interval writes a duration to the internal buffer.
 func (enc *Encoder) Interval(tag int, interval time.Duration) {
 	enc.w.Interval(tag, interval)
@@ -170,6 +176,8 @@ func (enc *Encoder) TagAny(tag int, value any) {
 		enc.Interval(tag, v)
 	case time.Time:
 		enc.DateTime(tag, v)
+	case DateTimeExtended:
+		enc.DateTimeExtended(tag, time.Time(v))
 	case *big.Int:
 		enc.BigInteger(tag, v)
 	case TagEncodable:
@@ -265,6 +273,12 @@ func buildTimeEncodeFunc() func(*Encoder, int, reflect.Value) {
 	}
 }
 
+func buildDateTimeExtendedEncodeFunc() func(*Encoder, int, reflect.Value) {
+	return func(e *Encoder, tag int, v reflect.Value) {
+		e.DateTimeExtended(tag, time.Time(v.Interface().(DateTimeExtended)))
+	}
+}
+
 func buildBigIntEncodeFunc() func(*Encoder, int, reflect.Value) {
 	return func(e *Encoder, tag int, v reflect.Value) {
 		n := v.Interface().(big.Int)
@@ -326,6 +340,8 @@ func encodeFunc(ty reflect.Type) func(*Encoder, int, reflect.Value) {
 		return buildDurationEncodeFunc()
 	case reflect.TypeFor[time.Time]():
 		return buildTimeEncodeFunc()
+	case reflect.TypeFor[DateTimeExtended]():
+		return buildDateTimeExtendedEncodeFunc()
 	case reflect.TypeFor[big.Int]():
 		return buildBigIntEncodeFunc()
 	}

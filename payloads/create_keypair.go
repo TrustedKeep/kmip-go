@@ -32,17 +32,29 @@ type CreateKeyPairRequestPayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	CommonTemplateAttribute *kmip.TemplateAttribute
+	//
+	// Replaced by CommonAttributes in KMIP 2.0.
+	CommonTemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
 	// Specifies templates and/or attributes to be associated with the new object that apply to the Private Key Object. Order of precedence applies.
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	PrivateKeyTemplateAttribute *kmip.TemplateAttribute
+	//
+	// Replaced by PrivateKeyAttributes in KMIP 2.0.
+	PrivateKeyTemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
 	// Specifies templates and/or attributes to be associated with the new object that apply to the Public Key Object. Order of precedence applies.
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	PublicKeyTemplateAttribute *kmip.TemplateAttribute
+	//
+	// Replaced by PublicKeyAttributes in KMIP 2.0.
+	PublicKeyTemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
+	// KMIP 2.0+ attributes applying to both keys.
+	CommonAttributes kmip.Attributes `ttlv:"CommonAttributes,omitempty,version=v2.0.."`
+	// KMIP 2.0+ attributes applying to the Private Key object.
+	PrivateKeyAttributes kmip.Attributes `ttlv:"PrivateKeyAttributes,omitempty,version=v2.0.."`
+	// KMIP 2.0+ attributes applying to the Public Key object.
+	PublicKeyAttributes kmip.Attributes `ttlv:"PublicKeyAttributes,omitempty,version=v2.0.."`
 }
 
 func (a *CreateKeyPairRequestPayload) Operation() kmip.Operation {
@@ -59,12 +71,16 @@ type CreateKeyPairResponsePayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	PrivateKeyTemplateAttribute *kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0: the response returns only the two Unique Identifiers.
+	PrivateKeyTemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
 	// An OPTIONAL list of attributes, for the Public Key Object, with values that were not specified in the request, but have been implicitly set by the key management server.
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	PublicKeyTemplateAttribute *kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0: the response returns only the two Unique Identifiers.
+	PublicKeyTemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
 }
 
 func (a *CreateKeyPairResponsePayload) Operation() kmip.Operation {

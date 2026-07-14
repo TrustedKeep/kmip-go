@@ -1,0 +1,529 @@
+<KMIP>
+<!--
+     Key Management Interoperability Protocol Test Cases Version 2.0
+     Committee Note 01
+     24 October 2019
+     Copyright (c) OASIS Open 2019. All Rights Reserved.
+     Source: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/cn01/test-cases/kmip-v2.0/
+     Latest version of the specification: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/kmip-testcases-v2.0.html
+     TC IPR Statement: https://www.oasis-open.org/committees/kmip/ipr.php
+-->
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-REKEY-1-20 step=0"/>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Create"/>
+    <RequestPayload>
+      <ObjectType type="Enumeration" value="SymmetricKey"/>
+      <Attributes>
+        <CryptographicAlgorithm type="Enumeration" value="AES"/>
+        <CryptographicLength type="Integer" value="128"/>
+        <CryptographicUsageMask type="Integer" value="Decrypt Encrypt"/>
+        <ActivationDate type="DateTime" value="$NOW-3600"/>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-original"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+      </Attributes>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Create"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <ObjectType type="Enumeration" value="SymmetricKey"/>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-REKEY-1-20 step=1"/>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <AttributeReference type="Enumeration" value="State"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <Attributes>
+        <State type="Enumeration" value="Active"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-REKEY-1-20 step=2"/>
+    <BatchOrderOption type="Boolean" value="true"/>
+    <BatchCount type="Integer" value="8"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="01"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-first-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+      </Attributes>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="02"/>
+    <RequestPayload>
+      <AttributeReference type="Enumeration" value="Name"/>
+      <AttributeReference type="Enumeration" value="State"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="03"/>
+    <RequestPayload>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-second-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+      </Attributes>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="04"/>
+    <RequestPayload>
+      <AttributeReference type="Enumeration" value="Name"/>
+      <AttributeReference type="Enumeration" value="State"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="05"/>
+    <RequestPayload>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-third-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+      </Attributes>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="06"/>
+    <RequestPayload>
+      <AttributeReference type="Enumeration" value="Name"/>
+      <AttributeReference type="Enumeration" value="State"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="07"/>
+    <RequestPayload>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-fourth-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+      </Attributes>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="08"/>
+    <RequestPayload>
+      <AttributeReference type="Enumeration" value="Name"/>
+      <AttributeReference type="Enumeration" value="State"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="8"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="01"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="02"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-original"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-first-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <State type="Enumeration" value="Active"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="03"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="04"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-original"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-first-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-second-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <State type="Enumeration" value="Active"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="05"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="06"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-original"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-first-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-second-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-third-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <State type="Enumeration" value="Active"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="ReKey"/>
+    <UniqueBatchItemID type="ByteString" value="07"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <UniqueBatchItemID type="ByteString" value="08"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+      <Attributes>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-original"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-first-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-second-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-third-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <Name>
+          <NameValue type="TextString" value="TC-REKEY-1-20-fourth-rekey"/>
+          <NameType type="Enumeration" value="UninterpretedTextString"/>
+        </Name>
+        <State type="Enumeration" value="Active"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-REKEY-1-20 step=3"/>
+    <BatchOrderOption type="Boolean" value="true"/>
+    <BatchCount type="Integer" value="10"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="01"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <RevocationReason>
+        <RevocationReasonCode type="Enumeration" value="CessationOfOperation"/>
+      </RevocationReason>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="02"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="03"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+      <RevocationReason>
+        <RevocationReasonCode type="Enumeration" value="CessationOfOperation"/>
+      </RevocationReason>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="04"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="05"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+      <RevocationReason>
+        <RevocationReasonCode type="Enumeration" value="CessationOfOperation"/>
+      </RevocationReason>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="06"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="07"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+      <RevocationReason>
+        <RevocationReasonCode type="Enumeration" value="CessationOfOperation"/>
+      </RevocationReason>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="08"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="09"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+      <RevocationReason>
+        <RevocationReasonCode type="Enumeration" value="CessationOfOperation"/>
+      </RevocationReason>
+    </RequestPayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="10"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="10"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="01"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="02"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="03"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="04"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_1"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="05"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="06"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_2"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="07"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="08"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_3"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Revoke"/>
+    <UniqueBatchItemID type="ByteString" value="09"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+    </ResponsePayload>
+  </BatchItem>
+  <BatchItem>
+    <Operation type="Enumeration" value="Destroy"/>
+    <UniqueBatchItemID type="ByteString" value="10"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_4"/>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+</KMIP>

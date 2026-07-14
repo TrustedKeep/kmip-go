@@ -1,0 +1,144 @@
+<KMIP>
+<!--
+     Key Management Interoperability Protocol Test Cases Version 2.0
+     Committee Note 01
+     24 October 2019
+     Copyright (c) OASIS Open 2019. All Rights Reserved.
+     Source: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/cn01/test-cases/kmip-v2.0/
+     Latest version of the specification: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/kmip-testcases-v2.0.html
+     TC IPR Statement: https://www.oasis-open.org/committees/kmip/ipr.php
+-->
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-CERTATTR-1-20 step=0"/>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Register"/>
+    <RequestPayload>
+      <ObjectType type="Enumeration" value="Certificate"/>
+      <Attributes>
+        <CertificateType type="Enumeration" value="X_509"/>
+        <CryptographicUsageMask type="Integer" value="ContentCommitment"/>
+      </Attributes>
+      <Certificate>
+        <CertificateType type="Enumeration" value="X_509"/>
+        <CertificateValue type="ByteString" value="3082022930820192a00302010202083132333435363738300d06092a864886f70d01010b05003031310b300906035504061302415531123010060355040a13094b6d69702054657374310e300c06035504031305496e746572301e170d3135313231373036313030375a170d3136303130333036353033365a302e310b300906035504061302415531123010060355040a13094b6d69702054657374310b300906035504031302454530819f300d06092a864886f70d010101050003818d00308189028181009bccc77338705de30fae343fd02f8f94ec4657a8c24a0e56103bc45db6d740868b9ac3fbcc0ebac6e1e8a954a85050d6aae7600934b8ebe8b03db6ba0884b1aee69e4fc3a1bd11fcbfef68de0baa888d1f5cbca2d81a3168b2a901e9f84d3854ee10aa7235dfef0684f58d98879c936372435f2cb102782d3884f9abb818817d0203010001a34d304b301d0603551d0e0416041488ca3ff1ce8f6b8af4647ea1a1829abd91b227c4301f0603551d230418301680147c3a5ad107907f9af1106e85c6dffc431ba7829030090603551d1304023000300d06092a864886f70d01010b050003818100d39bdd1623dd990a65007d82cc06aedda9fe7bedffb03189d4f51f4ae70cfb275568b62bc59ef2d80b82300de83d871c28541c6d8d9f601c12180b790b9c6c3ca14520fee8be4878f72e7e47b5a8918774ee5776c93e1ba84063f0ca48b5d7d05362489e7b7e7071263c011fb14562aa63b7bdd1715a5e186028a3caa874b283"/>
+      </Certificate>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Register"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <ClientCorrelationValue type="TextString" value="TC-CERTATTR-1-20 step=1"/>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+
+
+<!--
+Issuer: C=AU, O=Kmip Test, CN=Inter
+Subject: C=AU, O=Kmip Test, CN=EE
+-->
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <Attributes>
+        <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+        <ShortUniqueIdentifier type="ByteString" value="$SHORT_UNIQUE_IDENTIFIER_0"/>
+        <ObjectType type="Enumeration" value="Certificate"/>
+        <CertificateType type="Enumeration" value="X_509"/>
+        <AlwaysSensitive type="Boolean" value="false"/>
+        <CertificateIssuerC type="TextString" value="AU"/>
+        <CertificateIssuerCN type="TextString" value="Inter"/>
+        <CertificateIssuerO type="TextString" value="Kmip Test"/>
+        <CertificateLength type="Integer" value="557"/>
+        <CertificateSubjectC type="TextString" value="AU"/>
+        <CertificateSubjectCN type="TextString" value="EE"/>
+        <CertificateSubjectO type="TextString" value="Kmip Test"/>
+        <CryptographicAlgorithm type="Enumeration" value="RSA"/>
+        <CryptographicLength type="Integer" value="1024"/>
+        <Digest>
+          <HashingAlgorithm type="Enumeration" value="SHA_256"/>
+          <DigestValue type="ByteString" value="c2afb2c05ca8690d7d9cf753c3cceb758030c29538b730bb23b77dc5ff0bbb36"/>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+        </Digest>
+	<KeyFormatType type="Enumeration" value="Raw"/>
+        <DigitalSignatureAlgorithm type="Enumeration" value="SHA_256WithRSAEncryption"/>
+        <Extractable type="Boolean" value="true"/>
+        <Fresh type="Boolean" value="true"/>
+        <InitialDate type="DateTime" value="$NOW"/>
+        <LastChangeDate type="DateTime" value="$NOW"/>
+        <LeaseTime type="Interval" value="3600"/>
+        <NeverExtractable type="Boolean" value="false"/>
+        <Sensitive type="Boolean" value="false"/>
+        <State type="Enumeration" value="PreActive"/>
+        <X_509CertificateIdentifier>
+          <IssuerDistinguishedName type="ByteString" value="3031310b300906035504061302415531123010060355040a13094b6d69702054657374310e300c06035504031305496e746572"/>
+          <CertificateSerialNumber type="ByteString" value="02083132333435363738"/>
+        </X_509CertificateIdentifier>
+        <X_509CertificateIssuer>
+          <IssuerDistinguishedName type="ByteString" value="3031310b300906035504061302415531123010060355040a13094b6d69702054657374310e300c06035504031305496e746572"/>
+        </X_509CertificateIssuer>
+        <X_509CertificateSubject>
+          <SubjectDistinguishedName type="ByteString" value="302e310b300906035504061302415531123010060355040a13094b6d69702054657374310b3009060355040313024545"/>
+        </X_509CertificateSubject>
+        <ProtectionStorageMask type="Integer" value="Software"/>
+        <CryptographicUsageMask type="Integer" value="ContentCommitment"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+
+</KMIP>
+

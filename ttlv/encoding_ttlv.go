@@ -139,6 +139,13 @@ func (enc *ttlvWriter) DateTime(tag int, date time.Time) {
 	})
 }
 
+func (enc *ttlvWriter) DateTimeExtended(tag int, date time.Time) {
+	enc.encodeAppend(tag, TypeDateTimeExtended, 8, func(b []byte) []byte {
+		//nolint:gosec // this cast is safe as we are appending a number to a byte slice.
+		return binary.BigEndian.AppendUint64(b, uint64(date.UnixMicro()))
+	})
+}
+
 func (enc *ttlvWriter) Interval(tag int, interval time.Duration) {
 	if interval < 0 {
 		panic("interval cannot be negative")
@@ -186,7 +193,7 @@ func (dec *ttlvReader) validate() error {
 	if len(dec.buf[8:]) < dec.paddedLen() {
 		return Errorf("TTLV value too short. Got %d bytes, expected %d", len(dec.buf[8:]), dec.paddedLen())
 	}
-	if ty := dec.Type(); ty > TypeInterval || ty == 0 {
+	if ty := dec.Type(); ty > TypeDateTimeExtended || ty == 0 {
 		return Errorf("invalid TTLV type %s", ty)
 	}
 	// if th := (dec.Tag() >> 16) & 0xFF; th != 0x42 && th != 0x54 {
@@ -313,6 +320,15 @@ func (dec *ttlvReader) DateTime(tag int) (time.Time, error) {
 	}
 	//nolint:gosec // this cast is safe as we are parsing raw bytes.
 	v := time.Unix(int64(binary.BigEndian.Uint64(dec.value())), 0)
+	return v, dec.Next()
+}
+
+func (dec *ttlvReader) DateTimeExtended(tag int) (time.Time, error) {
+	if err := dec.assertType(TypeDateTimeExtended, tag); err != nil {
+		return time.Time{}, err
+	}
+	//nolint:gosec // this cast is safe as we are parsing raw bytes.
+	v := time.UnixMicro(int64(binary.BigEndian.Uint64(dec.value())))
 	return v, dec.Next()
 }
 

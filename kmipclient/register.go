@@ -63,7 +63,7 @@ func (ex ExecRegisterWantType) error(err error) ExecRegister {
 				err: err,
 			},
 			func(rrp **payloads.RegisterRequestPayload) *[]kmip.Attribute {
-				return &(*rrp).TemplateAttribute.Attribute
+				return attrTarget(ex.client, &(*rrp).TemplateAttribute, &(*rrp).Attributes)
 			},
 			func(ae AttributeExecutor[*payloads.RegisterRequestPayload, *payloads.RegisterResponsePayload, ExecRegister]) ExecRegister {
 				return ExecRegister{ae}
@@ -92,7 +92,7 @@ func (ex ExecRegisterWantType) Object(value kmip.Object) ExecRegister {
 				},
 			},
 			func(rrp **payloads.RegisterRequestPayload) *[]kmip.Attribute {
-				return &(*rrp).TemplateAttribute.Attribute
+				return attrTarget(ex.client, &(*rrp).TemplateAttribute, &(*rrp).Attributes)
 			},
 			func(ae AttributeExecutor[*payloads.RegisterRequestPayload, *payloads.RegisterResponsePayload, ExecRegister]) ExecRegister {
 				return ExecRegister{ae}

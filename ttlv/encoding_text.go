@@ -124,6 +124,13 @@ func (j *textWriter) DateTime(tag int, date time.Time) {
 	})
 }
 
+// DateTimeExtended implements writer.
+func (j *textWriter) DateTimeExtended(tag int, date time.Time) {
+	j.encodeAppend(TypeDateTimeExtended, tag, func(b []byte) []byte {
+		return date.AppendFormat(b, time.RFC3339Nano)
+	})
+}
+
 // Enum implements writer.
 func (j *textWriter) Enum(enumtag, tag int, value uint32) {
 	if enumtag <= 0 {

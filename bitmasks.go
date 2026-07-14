@@ -38,6 +38,23 @@ func init() {
 		"OnLineStorage",
 		"ArchivalStorage",
 	)
+	ttlv.RegisterBitmask[ProtectionStorageMask](
+		TagProtectionStorageMask,
+		"Software",
+		"Hardware",
+		"OnProcessor",
+		"OnSystem",
+		"OffSystem",
+		"Hypervisor",
+		"OperatingSystem",
+		"Container",
+		"OnPremises",
+		"OffPremises",
+		"SelfManaged",
+		"Outsourced",
+		"Validated",
+		"SameJurisdiction",
+	)
 }
 
 // CryptographicUsageMask represents a set of bitmask flags indicating the permitted cryptographic operations
@@ -98,6 +115,35 @@ func (mask CryptographicUsageMask) MarshalText() ([]byte, error) {
 
 func (mask *CryptographicUsageMask) UnmarshalText(text []byte) error {
 	return maskUnmarshalText(mask, TagCryptographicUsageMask, string(text))
+}
+
+// ProtectionStorageMask is a KMIP 2.0 bitmask describing acceptable protection
+// storage for a Managed Object (e.g. software vs hardware, on/off system).
+type ProtectionStorageMask int32
+
+const (
+	ProtectionStorageSoftware ProtectionStorageMask = 1 << iota
+	ProtectionStorageHardware
+	ProtectionStorageOnProcessor
+	ProtectionStorageOnSystem
+	ProtectionStorageOffSystem
+	ProtectionStorageHypervisor
+	ProtectionStorageOperatingSystem
+	ProtectionStorageContainer
+	ProtectionStorageOnPremises
+	ProtectionStorageOffPremises
+	ProtectionStorageSelfManaged
+	ProtectionStorageOutsourced
+	ProtectionStorageValidated
+	ProtectionStorageSameJurisdiction
+)
+
+func (mask ProtectionStorageMask) MarshalText() ([]byte, error) {
+	return []byte(ttlv.BitmaskStr(mask, " | ")), nil
+}
+
+func (mask *ProtectionStorageMask) UnmarshalText(text []byte) error {
+	return maskUnmarshalText(mask, TagProtectionStorageMask, string(text))
 }
 
 // StorageStatusMask represents a bitmask for storage status flags.

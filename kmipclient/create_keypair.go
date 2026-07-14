@@ -116,7 +116,7 @@ func (ex ExecCreateKeyPair) Common() ExecCreateKeyPairAttr {
 		AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]{
 			ex.Executor,
 			func(ckprp **payloads.CreateKeyPairRequestPayload) *[]kmip.Attribute {
-				return &(*ckprp).CommonTemplateAttribute.Attribute
+				return attrTarget(ex.client, (*ckprp).CommonTemplateAttribute, &(*ckprp).CommonAttributes)
 			},
 			func(ae AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]) ExecCreateKeyPairAttr {
 				return ExecCreateKeyPairAttr{ae, func(ckprp *payloads.CreateKeyPairRequestPayload) *[]kmip.Name {
@@ -149,7 +149,7 @@ func (ex ExecCreateKeyPair) PrivateKey() ExecCreateKeyPairAttr {
 		AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]{
 			ex.Executor,
 			func(ckprp **payloads.CreateKeyPairRequestPayload) *[]kmip.Attribute {
-				return &(*ckprp).PrivateKeyTemplateAttribute.Attribute
+				return attrTarget(ex.client, (*ckprp).PrivateKeyTemplateAttribute, &(*ckprp).PrivateKeyAttributes)
 			},
 			func(ae AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]) ExecCreateKeyPairAttr {
 				return ExecCreateKeyPairAttr{ae, func(ckprp *payloads.CreateKeyPairRequestPayload) *[]kmip.Name {
@@ -181,7 +181,7 @@ func (ex ExecCreateKeyPair) PublicKey() ExecCreateKeyPairAttr {
 		AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]{
 			ex.Executor,
 			func(ckprp **payloads.CreateKeyPairRequestPayload) *[]kmip.Attribute {
-				return &(*ckprp).PublicKeyTemplateAttribute.Attribute
+				return attrTarget(ex.client, (*ckprp).PublicKeyTemplateAttribute, &(*ckprp).PublicKeyAttributes)
 			},
 			func(ae AttributeExecutor[*payloads.CreateKeyPairRequestPayload, *payloads.CreateKeyPairResponsePayload, ExecCreateKeyPairAttr]) ExecCreateKeyPairAttr {
 				return ExecCreateKeyPairAttr{ae, func(ckprp *payloads.CreateKeyPairRequestPayload) *[]kmip.Name {

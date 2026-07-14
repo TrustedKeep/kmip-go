@@ -20,13 +20,17 @@ import (
 //   - This function does not return errors directly. Errors may be returned when executing the ExecAddAttribute.
 //   - If the attribute name or value is not supported by the server, an error will be returned during execution.
 func (c *Client) AddAttribute(id string, name kmip.AttributeName, value any) ExecAddAttribute {
+	attr := kmip.Attribute{AttributeName: name, AttributeValue: value}
+	req := &payloads.AddAttributeRequestPayload{UniqueIdentifier: id}
+	if c.usesV2Attributes() {
+		req.NewAttribute = kmip.NewAttribute{Attribute: attr}
+	} else {
+		req.Attribute = attr
+	}
 	return ExecAddAttribute{
 		Executor[*payloads.AddAttributeRequestPayload, *payloads.AddAttributeResponsePayload]{
 			client: c,
-			req: &payloads.AddAttributeRequestPayload{
-				UniqueIdentifier: id,
-				Attribute:        kmip.Attribute{AttributeName: name, AttributeValue: value},
-			},
+			req:    req,
 		},
 	}
 }

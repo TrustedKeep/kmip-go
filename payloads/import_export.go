@@ -26,6 +26,8 @@ func init() {
 type ImportRequestPayload struct {
 	// The Unique Identifier of the object to be imported.
 	UniqueIdentifier string
+	// Determines the type of object being imported. Carried as a top-level field in KMIP 2.0+.
+	ObjectType kmip.ObjectType `ttlv:",omitempty,version=v2.0.."`
 	// A Boolean.  If specified and true then any existing object with the same Unique Identifier SHALL be replaced by this operation.
 	// If absent or false then the operation SHALL fail if there is an existing object with the same Unique Identifier.
 	ReplaceExisting bool `ttlv:",omitempty"`
@@ -33,7 +35,11 @@ type ImportRequestPayload struct {
 	// Otherwise the server SHALL store the object as provided.
 	KeyWrapType kmip.KeyWrapType `ttlv:",omitempty"`
 	// All of the object’s Attributes.
-	Attribute []kmip.Attribute
+	//
+	// Replaced by Attributes in KMIP 2.0.
+	Attribute []kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// All of the object's attributes, in KMIP 2.0+.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 	// The object value being imported, in the same manner as the Register operation.
 	Object kmip.Object
 }
@@ -43,31 +49,50 @@ func (pl *ImportRequestPayload) TagDecodeTTLV(d *ttlv.Decoder, tag int) error {
 		if err := d.TagAny(kmip.TagUniqueIdentifier, &pl.UniqueIdentifier); err != nil {
 			return err
 		}
-
+		// KMIP 2.0 carries the object type as a top-level field.
+		if err := d.Opt(kmip.TagObjectType, &pl.ObjectType); err != nil {
+			return err
+		}
 		if err := d.Opt(kmip.TagReplaceExisting, &pl.ReplaceExisting); err != nil {
 			return err
 		}
-
 		if err := d.Opt(kmip.TagKeyWrapType, &pl.KeyWrapType); err != nil {
 			return err
 		}
 
-		if err := d.Any(&pl.Attribute); err != nil {
-			return err
+		// Attributes are carried as an Attributes structure (v2.0+) or as a list
+		// of name-on-the-wire Attribute (v1.x).
+		switch d.Tag() {
+		case kmip.TagAttributes:
+			if err := d.TagAny(kmip.TagAttributes, &pl.Attributes); err != nil {
+				return err
+			}
+		case kmip.TagAttribute:
+			if err := d.Any(&pl.Attribute); err != nil {
+				return err
+			}
 		}
 
-		for i := range pl.Attribute {
-			if pl.Attribute[i].AttributeName == kmip.AttributeNameObjectType {
-				if objType, ok := pl.Attribute[i].AttributeValue.(kmip.ObjectType); ok {
-					var err error
-					if pl.Object, err = kmip.NewObjectForType(objType); err != nil {
-						return err
+		objType := pl.ObjectType
+		if objType == 0 {
+			// v1.x: derive the object type from the attribute list.
+			for i := range pl.Attribute {
+				if pl.Attribute[i].AttributeName == kmip.AttributeNameObjectType {
+					if ot, ok := pl.Attribute[i].AttributeValue.(kmip.ObjectType); ok {
+						objType = ot
+						break
 					}
-					return d.Any(&pl.Object)
 				}
 			}
 		}
-		return errors.New("object type attribute not found in import request")
+		if objType == 0 {
+			return errors.New("object type not found in import request")
+		}
+		var err error
+		if pl.Object, err = kmip.NewObjectForType(objType); err != nil {
+			return err
+		}
+		return d.Any(&pl.Object)
 	})
 }
 
@@ -121,7 +146,11 @@ type ExportResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// All of the object’s Attributes.
-	Attribute []kmip.Attribute
+	//
+	// Replaced by Attributes in KMIP 2.0.
+	Attribute []kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// All of the object's attributes, in KMIP 2.0+.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 	// The object value being returned, in the same manner as the Get operation.
 	Object kmip.Object
 }
@@ -139,8 +168,15 @@ func (pl *ExportResponsePayload) TagDecodeTTLV(d *ttlv.Decoder, tag int) error {
 		if err := d.TagAny(kmip.TagUniqueIdentifier, &pl.UniqueIdentifier); err != nil {
 			return err
 		}
-		if err := d.Any(&pl.Attribute); err != nil {
-			return err
+		switch d.Tag() {
+		case kmip.TagAttributes:
+			if err := d.TagAny(kmip.TagAttributes, &pl.Attributes); err != nil {
+				return err
+			}
+		case kmip.TagAttribute:
+			if err := d.Any(&pl.Attribute); err != nil {
+				return err
+			}
 		}
 
 		var err error

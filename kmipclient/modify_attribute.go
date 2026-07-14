@@ -21,13 +21,17 @@ import (
 //   - This function does not return errors directly. Errors may be returned when executing the ExecModifyAttribute.
 //   - If the attribute or object does not exist, or the server rejects the operation, an error will be returned during execution.
 func (c *Client) ModifyAttribute(id string, name kmip.AttributeName, value any) ExecModifyAttribute {
+	attr := kmip.Attribute{AttributeName: name, AttributeValue: value}
+	req := &payloads.ModifyAttributeRequestPayload{UniqueIdentifier: id}
+	if c.usesV2Attributes() {
+		req.NewAttribute = kmip.NewAttribute{Attribute: attr}
+	} else {
+		req.Attribute = attr
+	}
 	return ExecModifyAttribute{
 		Executor[*payloads.ModifyAttributeRequestPayload, *payloads.ModifyAttributeResponsePayload]{
 			client: c,
-			req: &payloads.ModifyAttributeRequestPayload{
-				UniqueIdentifier: id,
-				Attribute:        kmip.Attribute{AttributeName: name, AttributeValue: value},
-			},
+			req:    req,
 		},
 	}
 }

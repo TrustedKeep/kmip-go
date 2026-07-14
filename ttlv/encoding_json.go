@@ -159,6 +159,15 @@ func (j *jsonWriter) DateTime(tag int, date time.Time) {
 	})
 }
 
+// DateTimeExtended implements writer.
+func (j *jsonWriter) DateTimeExtended(tag int, date time.Time) {
+	j.encodeAppend(TypeDateTimeExtended, tag, func(b []byte) []byte {
+		b = append(b, '"')
+		b = date.AppendFormat(b, time.RFC3339Nano)
+		return append(b, '"')
+	})
+}
+
 // Enum implements writer.
 func (j *jsonWriter) Enum(enumtag, tag int, value uint32) {
 	if enumtag <= 0 {
@@ -511,6 +520,31 @@ func (j *jsonReader) DateTime(tag int) (time.Time, error) {
 		return t.Local(), j.Next()
 	default:
 		return time.Time{}, Errorf("invalid date-time value: %q", val)
+	}
+}
+
+// DateTimeExtended implements reader.
+func (j *jsonReader) DateTimeExtended(tag int) (time.Time, error) {
+	if err := j.assertType(TypeDateTimeExtended, tag); err != nil {
+		return time.Time{}, err
+	}
+	switch val := j.getValue().(type) {
+	case string:
+		if strings.HasPrefix(val, "0x") {
+			parsed, err := strconv.ParseUint(val[2:], 16, 64)
+			if err != nil {
+				return time.Time{}, err
+			}
+			//nolint:gosec // this cast is safe as we are parsing a 64 bits hex value
+			return time.UnixMicro(int64(parsed)).UTC(), j.Next()
+		}
+		t, err := time.Parse(time.RFC3339Nano, val)
+		if err != nil {
+			return t, err
+		}
+		return t.Local(), j.Next()
+	default:
+		return time.Time{}, Errorf("invalid date-time-extended value: %q", val)
 	}
 }
 

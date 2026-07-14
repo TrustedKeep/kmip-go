@@ -779,6 +779,26 @@ type AttributeExecutor[Req, Resp kmip.OperationPayload, Wrap any] struct {
 	wrap     func(AttributeExecutor[Req, Resp, Wrap]) Wrap
 }
 
+// usesV2Attributes reports whether the client's negotiated protocol version uses the
+// KMIP 2.0 Attributes structure (rather than the v1.x Template-Attribute) for carrying
+// attributes.
+func (c *Client) usesV2Attributes() bool {
+	return c != nil && c.version != nil && ttlv.CompareVersions(*c.version, kmip.V2_0) >= 0
+}
+
+// attrTarget returns the attribute slice that the fluent attribute builders should
+// populate for the given request, routing to the KMIP 2.0 Attributes field when the
+// negotiated version is >= 2.0 and to the v1.x Template-Attribute otherwise. Because
+// both kmip.Attributes and TemplateAttribute.Attribute are []kmip.Attribute, and the
+// payloads version-gate the two fields, this makes the same builder API produce the
+// correct wire form for either protocol version.
+func attrTarget(c *Client, tmpl *kmip.TemplateAttribute, attrs *kmip.Attributes) *[]kmip.Attribute {
+	if c.usesV2Attributes() {
+		return (*[]kmip.Attribute)(attrs)
+	}
+	return &tmpl.Attribute
+}
+
 // WithAttributes appends the provided KMIP attributes to the request's attribute list.
 //
 // Parameters:

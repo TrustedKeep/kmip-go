@@ -20,7 +20,13 @@ type ModifyAttributeRequestPayload struct {
 	// The Unique Identifier of the object. If omitted, then the ID Placeholder value is used by the server as the Unique Identifier.
 	UniqueIdentifier string `ttlv:",omitempty"`
 	// Specifies the attribute associated with the object to be modified.
-	Attribute kmip.Attribute
+	//
+	// Replaced by CurrentAttribute/NewAttribute in KMIP 2.0.
+	Attribute kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// Optionally identifies, in KMIP 2.0+, the current value of the attribute to modify.
+	CurrentAttribute *kmip.CurrentAttribute `ttlv:"CurrentAttribute,omitempty,version=v2.0.."`
+	// Specifies, in KMIP 2.0+, the new value of the attribute.
+	NewAttribute kmip.NewAttribute `ttlv:"NewAttribute,omitempty,version=v2.0.."`
 }
 
 func (pl *ModifyAttributeRequestPayload) Operation() kmip.Operation {
@@ -32,7 +38,9 @@ type ModifyAttributeResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// The modified attribute associated with the object with the new value.
-	Attribute kmip.Attribute
+	//
+	// Removed in KMIP 2.0: the response returns only the Unique Identifier.
+	Attribute kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
 }
 
 func (pl *ModifyAttributeResponsePayload) Operation() kmip.Operation {

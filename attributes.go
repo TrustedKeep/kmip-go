@@ -80,6 +80,9 @@ const (
 	AttributeNameAlwaysSensitive     AttributeName = "Always Sensitive"
 	AttributeNameExtractable         AttributeName = "Extractable"
 	AttributeNameNeverExtractable    AttributeName = "Never Extractable"
+
+	// KMIP 2.0.
+	AttributeNameProtectionStorageMask AttributeName = "Protection Storage Mask"
 )
 
 var AllAttributeNames = []AttributeName{
@@ -93,6 +96,7 @@ var AllAttributeNames = []AttributeName{
 	AttributeNameX509CertificateIssuer, AttributeNameDigitalSignatureAlgorithm, AttributeNameAlternativeName, AttributeNameKeyValuePresent, AttributeNameKeyValueLocation,
 	AttributeNameOriginalCreationDate, AttributeNameRandomNumberGenerator, AttributeNamePKCS_12FriendlyName, AttributeNameDescription, AttributeNameComment, AttributeNameSensitive,
 	AttributeNameAlwaysSensitive, AttributeNameExtractable, AttributeNameNeverExtractable,
+	AttributeNameProtectionStorageMask,
 }
 
 var attrTypes = map[AttributeName]reflect.Type{
@@ -150,6 +154,8 @@ var attrTypes = map[AttributeName]reflect.Type{
 	AttributeNameAlwaysSensitive:     reflect.TypeFor[bool](),
 	AttributeNameExtractable:         reflect.TypeFor[bool](),
 	AttributeNameNeverExtractable:    reflect.TypeFor[bool](),
+
+	AttributeNameProtectionStorageMask: reflect.TypeFor[ProtectionStorageMask](),
 }
 
 func newAttribute(name AttributeName) reflect.Value {
@@ -161,6 +167,18 @@ func newAttribute(name AttributeName) reflect.Value {
 		return reflect.ValueOf(&ttlv.Value{})
 	}
 	return reflect.New(ty)
+}
+
+// newAttributeByTag returns a new pointer value able to hold the value of the
+// attribute identified by its dedicated KMIP 2.0 tag. Unknown tags fall back to
+// a generic ttlv.Value so their raw content is preserved.
+func newAttributeByTag(tag int) reflect.Value {
+	if name, ok := attrTagToName[tag]; ok {
+		if ty, ok := attrTypes[name]; ok {
+			return reflect.New(ty)
+		}
+	}
+	return reflect.ValueOf(&ttlv.Value{})
 }
 
 type Name struct {
@@ -192,6 +210,12 @@ type Attribute struct {
 	AttributeName  AttributeName
 	AttributeIndex *int32
 	AttributeValue any
+	// VendorIdentification identifies a KMIP 2.0 vendor (custom) attribute. When
+	// non-empty, the attribute is encoded inside an Attributes structure as an
+	// Attribute sub-structure (Vendor Identification / Attribute Name / Attribute
+	// Value) rather than under a dedicated tag. It is unused by the v1.x
+	// TemplateAttribute model and never appears on the wire there.
+	VendorIdentification string `ttlv:"-"`
 }
 
 func (att *Attribute) TagDecodeTTLV(d *ttlv.Decoder, tag int) error {

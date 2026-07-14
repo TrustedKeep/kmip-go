@@ -114,7 +114,9 @@ type SignatureVerifyResponsePayload struct {
 	// The Unique Identifier of the Managed Cryptographic Object that is the key used for the verification operation.
 	UniqueIdentifier string
 	// An Enumeration object indicating whether the signature is valid, invalid, or unknown.
-	ValidityIndicator kmip.ValidityIndicator
+	// Omitted by the intermediate responses of a streamed (multi-part) verification;
+	// only the final response carries it.
+	ValidityIndicator kmip.ValidityIndicator `ttlv:",omitempty"`
 	// The OPTIONAL recovered data (as a Byte String) for those signature algorithms where data recovery from the signature is supported.
 	Data []byte `ttlv:",omitempty"`
 	// Specifies the stream or by-parts value to be provided in subsequent calls to this operation for performing cryptographic operations.

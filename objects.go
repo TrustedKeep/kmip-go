@@ -592,7 +592,7 @@ type KeyMaterial struct {
 
 func (km *KeyMaterial) decode(d *ttlv.Decoder, tag int, format KeyFormatType) error {
 	switch format {
-	case KeyFormatTypeRaw, KeyFormatTypeECPrivateKey, KeyFormatTypePKCS_1, KeyFormatTypePKCS_8, KeyFormatTypeX_509, KeyFormatTypeOpaque:
+	case KeyFormatTypeRaw, KeyFormatTypeECPrivateKey, KeyFormatTypePKCS_1, KeyFormatTypePKCS_8, KeyFormatTypeX_509, KeyFormatTypeOpaque, KeyFormatTypePKCS_12:
 		return d.TagAny(tag, &km.Bytes)
 	case KeyFormatTypeTransparentSymmetricKey:
 		return d.TagAny(tag, &km.TransparentSymmetricKey)

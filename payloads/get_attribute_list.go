@@ -21,7 +21,11 @@ type GetAttributeListResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// The names of the available attributes associated with the object.
-	AttributeName []kmip.AttributeName
+	//
+	// Replaced by AttributeReference in KMIP 2.0.
+	AttributeName []kmip.AttributeName `ttlv:",omitempty,version=..v1.4"`
+	// The references of the available attributes associated with the object, in KMIP 2.0+.
+	AttributeReference []kmip.AttributeReference `ttlv:"AttributeReference,omitempty,version=v2.0.."`
 }
 
 func (pl *GetAttributeListResponsePayload) Operation() kmip.Operation {

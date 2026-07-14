@@ -27,12 +27,15 @@ type CredentialValue struct {
 	UserPassword *CredentialValueUserPassword
 	Device       *CredentialValueDevice
 	Attestation  *CredentialValueAttestation
+	// Ticket credential, introduced in KMIP 2.0.
+	Ticket *CredentialValueTicket
 }
 
 func (cred *CredentialValue) TagEncodeTTLV(e *ttlv.Encoder, tag int) {
 	e.TagAny(tag, cred.UserPassword)
 	e.TagAny(tag, cred.Device)
 	e.TagAny(tag, cred.Attestation)
+	e.TagAny(tag, cred.Ticket)
 }
 
 func (cred *CredentialValue) decode(d *ttlv.Decoder, tag int, cType CredentialType) error {
@@ -43,6 +46,8 @@ func (cred *CredentialValue) decode(d *ttlv.Decoder, tag int, cType CredentialTy
 		return d.TagAny(tag, &cred.Device)
 	case CredentialTypeAttestation:
 		return d.TagAny(tag, &cred.Attestation)
+	case CredentialTypeTicket:
+		return d.TagAny(tag, &cred.Ticket)
 	}
 	return fmt.Errorf("Unsupported credential type %X", cType)
 }
@@ -66,6 +71,12 @@ type CredentialValueAttestation struct {
 	AttestationType        AttestationType
 	AttestationMeasurement []byte `ttlv:",omitempty"`
 	AttestationAssertion   []byte `ttlv:",omitempty"`
+}
+
+// CredentialValueTicket is the KMIP 2.0 credential value for the Ticket credential
+// type: a session ticket previously issued by Login or Delegated Login.
+type CredentialValueTicket struct {
+	Ticket Ticket
 }
 
 type Credential struct {
@@ -125,6 +136,18 @@ type CryptographicParameters struct {
 type CryptographicDomainParameters struct {
 	Qlength          int32            `ttlv:",omitempty"`
 	RecommendedCurve RecommendedCurve `ttlv:",omitempty"`
+}
+
+// DerivationParameters carries the parameters controlling a DeriveKey operation.
+// Which fields are used depends on the Derivation Method (e.g. Salt and Iteration
+// Count for PBKDF2, Derivation Data for HASH/HMAC).
+type DerivationParameters struct {
+	CryptographicParameters *CryptographicParameters
+	InitializationVector    []byte `ttlv:",omitempty"`
+	DerivationData          []byte `ttlv:",omitempty"`
+	// Salt and IterationCount are used by the PBKDF2 derivation method.
+	Salt           []byte `ttlv:",omitempty"`
+	IterationCount int32  `ttlv:",omitempty"`
 }
 
 type KeyWrappingSpecification struct {

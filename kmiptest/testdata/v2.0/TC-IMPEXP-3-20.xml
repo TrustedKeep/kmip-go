@@ -1,0 +1,319 @@
+<KMIP>
+<!--
+     Key Management Interoperability Protocol Test Cases Version 2.0
+     Committee Note 01
+     24 October 2019
+     Copyright (c) OASIS Open 2019. All Rights Reserved.
+     Source: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/cn01/test-cases/kmip-v2.0/
+     Latest version of the specification: https://docs.oasis-open.org/kmip/kmip-testcases/v2.0/kmip-testcases-v2.0.html
+     TC IPR Statement: https://www.oasis-open.org/committees/kmip/ipr.php
+-->
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Interop"/>
+    <RequestPayload>
+      <InteropFunction type="Enumeration" value="Begin"/>
+      <InteropIdentifier type="TextString" value="TC-IMPEXP-3-20"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-4"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Interop"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Register"/>
+    <RequestPayload>
+      <ObjectType type="Enumeration" value="SecretData"/>
+      <Attributes>
+        <ProtectStopDate type="DateTime" value="2000-02-01T00:00:00+10:00"/>
+      </Attributes>
+      <SecretData>
+        <SecretDataType type="Enumeration" value="Password"/>
+        <KeyBlock>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+          <KeyValue>
+            <KeyMaterial type="ByteString" value="70617373776f7264"/>
+          </KeyValue>
+        </KeyBlock>
+      </SecretData>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-5"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Register"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Export"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-6"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Export"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <ObjectType type="Enumeration" value="SecretData"/>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <Attributes>
+        <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+        <ShortUniqueIdentifier type="ByteString" value="$SHORT_UNIQUE_IDENTIFIER_0"/>
+        <ObjectType type="Enumeration" value="SecretData"/>
+        <Digest>
+          <HashingAlgorithm type="Enumeration" value="SHA_256"/>
+          <DigestValue type="ByteString" value="5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"/>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+        </Digest>
+	<KeyFormatType type="Enumeration" value="Raw"/>
+        <LeaseTime type="Interval" value="3600"/>
+        <InitialDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <State type="Enumeration" value="PreActive"/>
+        <ProtectStopDate type="DateTime" value="2000-02-01T00:00:00+10:00"/>
+        <LastChangeDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <Fresh type="Boolean" value="true"/>
+        <Sensitive type="Boolean" value="false"/>
+        <AlwaysSensitive type="Boolean" value="false"/>
+        <Extractable type="Boolean" value="true"/>
+        <NeverExtractable type="Boolean" value="false"/>
+	<ProtectionStorageMask type="Integer" value="Software"/>
+      </Attributes>
+      <SecretData>
+        <SecretDataType type="Enumeration" value="Password"/>
+        <KeyBlock>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+          <KeyValue>
+            <KeyMaterial type="ByteString" value="70617373776f7264"/>
+          </KeyValue>
+        </KeyBlock>
+      </SecretData>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Import"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <ObjectType type="Enumeration" value="SecretData"/>
+      <ReplaceExisting type="Boolean" value="false"/>
+      <Attributes>
+        <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+        <ShortUniqueIdentifier type="ByteString" value="$SHORT_UNIQUE_IDENTIFIER_0"/>
+        <ObjectType type="Enumeration" value="SecretData"/>
+        <Digest>
+          <HashingAlgorithm type="Enumeration" value="SHA_256"/>
+          <DigestValue type="ByteString" value="5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"/>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+        </Digest>
+	<KeyFormatType type="Enumeration" value="Raw"/>
+        <LeaseTime type="Interval" value="3600"/>
+        <InitialDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <State type="Enumeration" value="PreActive"/>
+        <ProtectStopDate type="DateTime" value="2000-02-01T00:00:00+10:00"/>
+        <LastChangeDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <Fresh type="Boolean" value="true"/>
+        <Sensitive type="Boolean" value="false"/>
+        <AlwaysSensitive type="Boolean" value="false"/>
+        <Extractable type="Boolean" value="true"/>
+        <NeverExtractable type="Boolean" value="false"/>
+	<ProtectionStorageMask type="Integer" value="Software"/>
+      </Attributes>
+      <SecretData>
+        <SecretDataType type="Enumeration" value="Password"/>
+        <KeyBlock>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+          <KeyValue>
+            <KeyMaterial type="ByteString" value="70617373776f7264"/>
+          </KeyValue>
+        </KeyBlock>
+      </SecretData>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-7"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Import"/>
+    <ResultStatus type="Enumeration" value="OperationFailed"/>
+    <ResultReason type="Enumeration" value="ObjectAlreadyExists"/>
+    <ResultMessage type="TextString" value="DENIED"/>
+  </BatchItem>
+</ResponseMessage>
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <RequestPayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-8"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="GetAttributes"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+      <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+      <Attributes>
+        <UniqueIdentifier type="TextString" value="$UNIQUE_IDENTIFIER_0"/>
+        <ShortUniqueIdentifier type="ByteString" value="f890a516c1e578e61ac9e33a5c24b33982a8565b43e79f4966e29f472049cc08"/>
+        <ObjectType type="Enumeration" value="SecretData"/>
+        <Digest>
+          <HashingAlgorithm type="Enumeration" value="SHA_256"/>
+          <DigestValue type="ByteString" value="5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"/>
+          <KeyFormatType type="Enumeration" value="Raw"/>
+        </Digest>
+	<KeyFormatType type="Enumeration" value="Raw"/>
+        <LeaseTime type="Interval" value="3600"/>
+        <InitialDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <State type="Enumeration" value="PreActive"/>
+        <ProtectStopDate type="DateTime" value="2000-02-01T00:00:00+10:00"/>
+        <LastChangeDate type="DateTime" value="2018-12-19T19:24:26+10:00"/>
+        <Fresh type="Boolean" value="true"/>
+        <Sensitive type="Boolean" value="false"/>
+        <AlwaysSensitive type="Boolean" value="false"/>
+        <Extractable type="Boolean" value="true"/>
+        <NeverExtractable type="Boolean" value="false"/>
+	<ProtectionStorageMask type="Integer" value="Software"/>
+      </Attributes>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+<RequestMessage>
+  <RequestHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <BatchCount type="Integer" value="1"/>
+  </RequestHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Interop"/>
+    <RequestPayload>
+      <InteropFunction type="Enumeration" value="End"/>
+      <InteropIdentifier type="TextString" value="TC-IMPEXP-3-20"/>
+    </RequestPayload>
+  </BatchItem>
+</RequestMessage>
+
+<ResponseMessage>
+  <ResponseHeader>
+    <ProtocolVersion>
+      <ProtocolVersionMajor type="Integer" value="2"/>
+      <ProtocolVersionMinor type="Integer" value="0"/>
+    </ProtocolVersion>
+    <TimeStamp type="DateTime" value="$NOW"/>
+    <ServerCorrelationValue type="TextString" value="D29B47CB-3E82D12E-9"/>
+    <BatchCount type="Integer" value="1"/>
+  </ResponseHeader>
+  <BatchItem>
+    <Operation type="Enumeration" value="Interop"/>
+    <ResultStatus type="Enumeration" value="Success"/>
+    <ResponsePayload>
+    </ResponsePayload>
+  </BatchItem>
+</ResponseMessage>
+
+</KMIP>

@@ -60,6 +60,12 @@ type ExecGetAttributes struct {
 //   - No error is returned by this method. If the attribute names are not supported by the server,
 //     an error may occur during execution.
 func (ex ExecGetAttributes) WithAttributes(names ...kmip.AttributeName) ExecGetAttributes {
-	ex.req.AttributeName = append(ex.req.AttributeName, names...)
+	if ex.client.usesV2Attributes() {
+		for _, n := range names {
+			ex.req.AttributeReference = append(ex.req.AttributeReference, kmip.AttributeReferenceFor(n))
+		}
+	} else {
+		ex.req.AttributeName = append(ex.req.AttributeName, names...)
+	}
 	return ex
 }

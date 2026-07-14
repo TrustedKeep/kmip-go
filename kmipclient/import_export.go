@@ -15,7 +15,7 @@ type ExecExport struct {
 	Executor[*payloads.ExportRequestPayload, *payloads.ExportResponsePayload]
 }
 
-// Import initializes an import operation with the client.
+// Import initializes an import operation with the client for the given object.
 func (c *Client) Import(id string, object kmip.Object) ExecImport {
 	return ExecImport{
 		AttributeExecutor[*payloads.ImportRequestPayload, *payloads.ImportResponsePayload, ExecImport]{
@@ -23,9 +23,14 @@ func (c *Client) Import(id string, object kmip.Object) ExecImport {
 				client: c,
 				req: &payloads.ImportRequestPayload{
 					UniqueIdentifier: id,
+					ObjectType:       object.ObjectType(),
+					Object:           object,
 				},
 			},
 			func(rrp **payloads.ImportRequestPayload) *[]kmip.Attribute {
+				if c.usesV2Attributes() {
+					return (*[]kmip.Attribute)(&(*rrp).Attributes)
+				}
 				return &(*rrp).Attribute
 			},
 			func(ae AttributeExecutor[*payloads.ImportRequestPayload, *payloads.ImportResponsePayload, ExecImport]) ExecImport {

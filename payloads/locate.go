@@ -70,7 +70,11 @@ type LocateRequestPayload struct {
 	// An Enumeration object that indicates the object group member type.
 	ObjectGroupMember kmip.ObjectGroupMember `ttlv:",omitempty,version=v1.1.."`
 	// Specifies an attribute and its value(s) that are REQUIRED to match those in a candidate object (according to the matching rules defined above).
-	Attribute []kmip.Attribute
+	//
+	// Replaced by Attributes in KMIP 2.0.
+	Attribute []kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// Specifies, in KMIP 2.0+, the attributes a candidate object is REQUIRED to match.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 }
 
 func (a *LocateRequestPayload) Operation() kmip.Operation {

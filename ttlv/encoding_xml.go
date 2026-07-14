@@ -135,6 +135,10 @@ func (enc *xmlWriter) DateTime(tag int, date time.Time) {
 	enc.encode(TypeDateTime, tag, date.Format(time.RFC3339))
 }
 
+func (enc *xmlWriter) DateTimeExtended(tag int, date time.Time) {
+	enc.encode(TypeDateTimeExtended, tag, date.Format(time.RFC3339Nano))
+}
+
 func (enc *xmlWriter) Interval(tag int, interval time.Duration) {
 	if interval < 0 {
 		panic("interval cannot be negative")
@@ -385,6 +389,17 @@ func (dec *xmlReader) DateTime(tag int) (time.Time, error) {
 		return time.Time{}, err
 	}
 	dt, err := time.Parse(time.RFC3339, dec.value())
+	if err != nil {
+		return time.Time{}, err
+	}
+	return dt.Local(), dec.Next()
+}
+
+func (dec *xmlReader) DateTimeExtended(tag int) (time.Time, error) {
+	if err := dec.assertType(TypeDateTimeExtended, tag); err != nil {
+		return time.Time{}, err
+	}
+	dt, err := time.Parse(time.RFC3339Nano, dec.value())
 	if err != nil {
 		return time.Time{}, err
 	}

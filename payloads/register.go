@@ -32,7 +32,11 @@ type RegisterRequestPayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	TemplateAttribute kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0 in favor of Attributes.
+	TemplateAttribute kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
+	// Attributes carries the object's attributes in KMIP 2.0+, replacing TemplateAttribute.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 	// The object being registered. The object and attributes MAY be wrapped.
 	Object kmip.Object
 }
@@ -46,8 +50,19 @@ func (pl *RegisterRequestPayload) TagDecodeTTLV(d *ttlv.Decoder, tag int) error 
 		if err := d.Any(&pl.ObjectType); err != nil {
 			return err
 		}
-		if err := d.Any(&pl.TemplateAttribute); err != nil {
-			return err
+
+		// Attributes are carried either as a TemplateAttribute (v1.x) or as an
+		// Attributes structure (v2.0+). Branch on the tag actually present so we
+		// decode correctly regardless of the negotiated version.
+		switch d.Tag() {
+		case kmip.TagAttributes:
+			if err := d.TagAny(kmip.TagAttributes, &pl.Attributes); err != nil {
+				return err
+			}
+		case kmip.TagTemplateAttribute:
+			if err := d.Any(&pl.TemplateAttribute); err != nil {
+				return err
+			}
 		}
 
 		var err error
@@ -66,7 +81,9 @@ type RegisterResponsePayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	TemplateAttribute *kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0: the Register response returns only the Unique Identifier.
+	TemplateAttribute *kmip.TemplateAttribute `ttlv:",version=..v1.4"`
 }
 
 func (pl *RegisterResponsePayload) Operation() kmip.Operation {

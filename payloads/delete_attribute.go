@@ -17,9 +17,17 @@ type DeleteAttributeRequestPayload struct {
 	// Determines the object whose attributes are being deleted. If omitted, then the ID Placeholder value is used by the server as the Unique Identifier.
 	UniqueIdentifier string `ttlv:",omitempty"`
 	// Specifies the name of the attribute associated with the object to be deleted.
-	AttributeName kmip.AttributeName
+	//
+	// Replaced by CurrentAttribute/AttributeReference in KMIP 2.0.
+	AttributeName kmip.AttributeName `ttlv:",omitempty,version=..v1.4"`
 	// Specifies the Index of the Attribute.
-	AttributeIndex *int32
+	//
+	// Removed in KMIP 2.0.
+	AttributeIndex *int32 `ttlv:",omitempty,version=..v1.4"`
+	// Optionally identifies, in KMIP 2.0+, the current value of the attribute to delete.
+	CurrentAttribute *kmip.CurrentAttribute `ttlv:"CurrentAttribute,omitempty,version=v2.0.."`
+	// Identifies, in KMIP 2.0+, the attribute to delete by reference.
+	AttributeReference *kmip.AttributeReference `ttlv:"AttributeReference,omitempty,version=v2.0.."`
 }
 
 func (pl *DeleteAttributeRequestPayload) Operation() kmip.Operation {
@@ -31,7 +39,9 @@ type DeleteAttributeResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// The deleted attribute associated with the object.
-	Attribute kmip.Attribute
+	//
+	// Removed in KMIP 2.0: the response returns only the Unique Identifier.
+	Attribute kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
 }
 
 func (pl *DeleteAttributeResponsePayload) Operation() kmip.Operation {

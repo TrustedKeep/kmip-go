@@ -46,6 +46,56 @@ func init() {
 		ResultReasonSensitive:           "Sensitive",
 		ResultReasonNotExtractable:      "NotExtractable",
 		ResultReasonObjectAlreadyExists: "ObjectAlreadyExists",
+		// KMIP 2.0.
+		ResultReasonInvalidTicket:                       "InvalidTicket",
+		ResultReasonUsageLimitExceeded:                  "UsageLimitExceeded",
+		ResultReasonNumericRange:                        "NumericRange",
+		ResultReasonInvalidDataType:                     "InvalidDataType",
+		ResultReasonReadOnlyAttribute:                   "ReadOnlyAttribute",
+		ResultReasonMultiValuedAttribute:                "MultiValuedAttribute",
+		ResultReasonUnsupportedAttribute:                "UnsupportedAttribute",
+		ResultReasonAttributeInstanceNotFound:           "AttributeInstanceNotFound",
+		ResultReasonAttributeNotFound:                   "AttributeNotFound",
+		ResultReasonAttributeReadOnly:                   "AttributeReadOnly",
+		ResultReasonAttributeSingleValued:               "AttributeSingleValued",
+		ResultReasonBadCryptographicParameters:          "BadCryptographicParameters",
+		ResultReasonBadPassword:                         "BadPassword",
+		ResultReasonCodecError:                          "CodecError",
+		ResultReasonIllegalObjectType:                   "IllegalObjectType",
+		ResultReasonIncompatibleCryptographicUsageMask:  "IncompatibleCryptographicUsageMask",
+		ResultReasonInternalServerError:                 "InternalServerError",
+		ResultReasonInvalidAsynchronousCorrelationValue: "InvalidAsynchronousCorrelationValue",
+		ResultReasonInvalidAttribute:                    "InvalidAttribute",
+		ResultReasonInvalidAttributeValue:               "InvalidAttributeValue",
+		ResultReasonInvalidCorrelationValue:             "InvalidCorrelationValue",
+		ResultReasonInvalidCSR:                          "InvalidCSR",
+		ResultReasonInvalidObjectType:                   "InvalidObjectType",
+		ResultReasonKeyWrapTypeNotSupported:             "KeyWrapTypeNotSupported",
+		ResultReasonMissingInitializationVector:         "MissingInitializationVector",
+		ResultReasonNonUniqueNameAttribute:              "NonUniqueNameAttribute",
+		ResultReasonObjectDestroyed:                     "ObjectDestroyed",
+		ResultReasonObjectNotFound:                      "ObjectNotFound",
+		ResultReasonNotAuthorized:                       "NotAuthorized",
+		ResultReasonServerLimitExceeded:                 "ServerLimitExceeded",
+		ResultReasonUnknownEnumeration:                  "UnknownEnumeration",
+		ResultReasonUnknownMessageExtension:             "UnknownMessageExtension",
+		ResultReasonUnknownTag:                          "UnknownTag",
+		ResultReasonUnsupportedCryptographicParameters:  "UnsupportedCryptographicParameters",
+		ResultReasonUnsupportedProtocolVersion:          "UnsupportedProtocolVersion",
+		ResultReasonWrappingObjectArchived:              "WrappingObjectArchived",
+		ResultReasonWrappingObjectDestroyed:             "WrappingObjectDestroyed",
+		ResultReasonWrappingObjectNotFound:              "WrappingObjectNotFound",
+		ResultReasonWrongKeyLifecycleState:              "WrongKeyLifecycleState",
+		ResultReasonProtectionStorageUnavailable:        "ProtectionStorageUnavailable",
+		ResultReasonPKCS_11CodecError:                   "PKCS_11CodecError",
+		ResultReasonPKCS_11InvalidFunction:              "PKCS_11InvalidFunction",
+		ResultReasonPKCS_11InvalidInterface:             "PKCS_11InvalidInterface",
+	})
+	ttlv.RegisterEnum(TagInteropFunction, map[InteropFunction]string{
+		// KMIP 2.0.
+		InteropFunctionBegin: "Begin",
+		InteropFunctionEnd:   "End",
+		InteropFunctionReset: "Reset",
 	})
 	ttlv.RegisterEnum(TagCredentialType, map[CredentialType]string{
 		CredentialTypeUsernameAndPassword: "UsernameAndPassword",
@@ -53,6 +103,10 @@ func init() {
 		CredentialTypeDevice: "Device",
 		// KMIP 1.2.
 		CredentialTypeAttestation: "Attestation",
+		// KMIP 2.0.
+		CredentialTypeOneTimePassword: "OneTimePassword",
+		CredentialTypeHashedPassword:  "HashedPassword",
+		CredentialTypeTicket:          "Ticket",
 	})
 	ttlv.RegisterEnum(TagRevocationReasonCode, map[RevocationReasonCode]string{
 		RevocationReasonCodeUnspecified:          "Unspecified",
@@ -700,6 +754,22 @@ func init() {
 	ttlv.RegisterEnum(TagKeyWrapType, map[KeyWrapType]string{
 		NotWrapped:   "NotWrapped",
 		AsRegistered: "AsRegistered"})
+	ttlv.RegisterEnum(TagTicketType, map[TicketType]string{
+		// KMIP 2.0.
+		TicketTypeLogin: "Login",
+	})
+	ttlv.RegisterEnum(TagDerivationMethod, map[DerivationMethod]string{
+		DerivationMethodPBKDF2:               "PBKDF2",
+		DerivationMethodHASH:                 "HASH",
+		DerivationMethodHMAC:                 "HMAC",
+		DerivationMethodENCRYPT:              "ENCRYPT",
+		DerivationMethodNIST800_108C:         "NIST800-108-C",
+		DerivationMethodNIST800_108F:         "NIST800-108-F",
+		DerivationMethodNIST800_108DPI:       "NIST800-108-DPI",
+		DerivationMethodAsymmetricKey:        "AsymmetricKey",
+		DerivationMethodAWSSignatureVersion4: "AWSSignatureVersion4",
+		DerivationMethodHKDF:                 "HKDF",
+	})
 }
 
 // ResultStatus represents the status of a KMIP operation result as defined by the KMIP specification.
@@ -750,8 +820,111 @@ const (
 	ResultReasonNotExtractable      ResultReason = 0x00000017
 	ResultReasonObjectAlreadyExists ResultReason = 0x00000018
 
+	// KMIP 2.0.
+	ResultReasonInvalidTicket                       ResultReason = 0x00000019
+	ResultReasonUsageLimitExceeded                  ResultReason = 0x0000001A
+	ResultReasonNumericRange                        ResultReason = 0x0000001B
+	ResultReasonInvalidDataType                     ResultReason = 0x0000001C
+	ResultReasonReadOnlyAttribute                   ResultReason = 0x0000001D
+	ResultReasonMultiValuedAttribute                ResultReason = 0x0000001E
+	ResultReasonUnsupportedAttribute                ResultReason = 0x0000001F
+	ResultReasonAttributeInstanceNotFound           ResultReason = 0x00000020
+	ResultReasonAttributeNotFound                   ResultReason = 0x00000021
+	ResultReasonAttributeReadOnly                   ResultReason = 0x00000022
+	ResultReasonAttributeSingleValued               ResultReason = 0x00000023
+	ResultReasonBadCryptographicParameters          ResultReason = 0x00000024
+	ResultReasonBadPassword                         ResultReason = 0x00000025
+	ResultReasonCodecError                          ResultReason = 0x00000026
+	ResultReasonIllegalObjectType                   ResultReason = 0x00000028
+	ResultReasonIncompatibleCryptographicUsageMask  ResultReason = 0x00000029
+	ResultReasonInternalServerError                 ResultReason = 0x0000002A
+	ResultReasonInvalidAsynchronousCorrelationValue ResultReason = 0x0000002B
+	ResultReasonInvalidAttribute                    ResultReason = 0x0000002C
+	ResultReasonInvalidAttributeValue               ResultReason = 0x0000002D
+	ResultReasonInvalidCorrelationValue             ResultReason = 0x0000002E
+	ResultReasonInvalidCSR                          ResultReason = 0x0000002F
+	ResultReasonInvalidObjectType                   ResultReason = 0x00000030
+	ResultReasonKeyWrapTypeNotSupported             ResultReason = 0x00000032
+	ResultReasonMissingInitializationVector         ResultReason = 0x00000034
+	ResultReasonNonUniqueNameAttribute              ResultReason = 0x00000035
+	ResultReasonObjectDestroyed                     ResultReason = 0x00000036
+	ResultReasonObjectNotFound                      ResultReason = 0x00000037
+	ResultReasonNotAuthorized                       ResultReason = 0x00000039
+	ResultReasonServerLimitExceeded                 ResultReason = 0x0000003A
+	ResultReasonUnknownEnumeration                  ResultReason = 0x0000003B
+	ResultReasonUnknownMessageExtension             ResultReason = 0x0000003C
+	ResultReasonUnknownTag                          ResultReason = 0x0000003D
+	ResultReasonUnsupportedCryptographicParameters  ResultReason = 0x0000003E
+	ResultReasonUnsupportedProtocolVersion          ResultReason = 0x0000003F
+	ResultReasonWrappingObjectArchived              ResultReason = 0x00000040
+	ResultReasonWrappingObjectDestroyed             ResultReason = 0x00000041
+	ResultReasonWrappingObjectNotFound              ResultReason = 0x00000042
+	ResultReasonWrongKeyLifecycleState              ResultReason = 0x00000043
+	ResultReasonProtectionStorageUnavailable        ResultReason = 0x00000044
+	ResultReasonPKCS_11CodecError                   ResultReason = 0x00000045
+	ResultReasonPKCS_11InvalidFunction              ResultReason = 0x00000046
+	ResultReasonPKCS_11InvalidInterface             ResultReason = 0x00000047
+
 	ResultReasonGeneralFailure ResultReason = 0x00000100
 )
+
+// InteropFunction is the function requested by the KMIP 2.0 Interop operation.
+type InteropFunction uint32
+
+const (
+	InteropFunctionBegin InteropFunction = 0x00000001
+	InteropFunctionEnd   InteropFunction = 0x00000002
+	InteropFunctionReset InteropFunction = 0x00000003
+)
+
+func (enum InteropFunction) MarshalText() ([]byte, error) {
+	return marshalText(enum)
+}
+
+func (enum *InteropFunction) UnmarshalText(text []byte) error {
+	return unmarshalText(enum, int(TagInteropFunction), string(text))
+}
+
+// TicketType is the type of a KMIP 2.0 Ticket (e.g. issued by Login).
+type TicketType uint32
+
+const (
+	TicketTypeLogin TicketType = 0x00000001
+)
+
+func (enum TicketType) MarshalText() ([]byte, error) {
+	return marshalText(enum)
+}
+
+func (enum *TicketType) UnmarshalText(text []byte) error {
+	return unmarshalText(enum, int(TagTicketType), string(text))
+}
+
+// DerivationMethod is the method used by the DeriveKey operation to derive a new
+// cryptographic object from an existing one.
+type DerivationMethod uint32
+
+const (
+	DerivationMethodPBKDF2         DerivationMethod = 0x00000001
+	DerivationMethodHASH           DerivationMethod = 0x00000002
+	DerivationMethodHMAC           DerivationMethod = 0x00000003
+	DerivationMethodENCRYPT        DerivationMethod = 0x00000004
+	DerivationMethodNIST800_108C   DerivationMethod = 0x00000005
+	DerivationMethodNIST800_108F   DerivationMethod = 0x00000006
+	DerivationMethodNIST800_108DPI DerivationMethod = 0x00000007
+	DerivationMethodAsymmetricKey  DerivationMethod = 0x00000008
+	// KMIP 2.0.
+	DerivationMethodAWSSignatureVersion4 DerivationMethod = 0x00000009
+	DerivationMethodHKDF                 DerivationMethod = 0x0000000A
+)
+
+func (enum DerivationMethod) MarshalText() ([]byte, error) {
+	return marshalText(enum)
+}
+
+func (enum *DerivationMethod) UnmarshalText(text []byte) error {
+	return unmarshalText(enum, int(TagDerivationMethod), string(text))
+}
 
 type CredentialType uint32
 
@@ -761,6 +934,10 @@ const (
 	CredentialTypeDevice CredentialType = 0x00000002
 	// KMIP 1.2.
 	CredentialTypeAttestation CredentialType = 0x00000003
+	// KMIP 2.0.
+	CredentialTypeOneTimePassword CredentialType = 0x00000004
+	CredentialTypeHashedPassword  CredentialType = 0x00000005
+	CredentialTypeTicket          CredentialType = 0x00000006
 )
 
 type RevocationReasonCode uint32

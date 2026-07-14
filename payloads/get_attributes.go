@@ -20,7 +20,11 @@ type GetAttributesRequestPayload struct {
 	// Determines the object whose attributes are being requested. If omitted, then the ID Placeholder value is used by the server as the Unique Identifier.
 	UniqueIdentifier string `ttlv:",omitempty"`
 	// Specifies the name of an attribute associated with the object.
-	AttributeName []kmip.AttributeName
+	//
+	// Replaced by AttributeReference in KMIP 2.0.
+	AttributeName []kmip.AttributeName `ttlv:",omitempty,version=..v1.4"`
+	// Specifies, in KMIP 2.0+, the attributes to return by reference. If empty, all attributes are returned.
+	AttributeReference []kmip.AttributeReference `ttlv:"AttributeReference,omitempty,version=v2.0.."`
 }
 
 // Operation implements kmip.OperationPayload.
@@ -32,7 +36,11 @@ type GetAttributesResponsePayload struct {
 	// The Unique Identifier of the object.
 	UniqueIdentifier string
 	// The requested attribute associated with the object.
-	Attribute []kmip.Attribute
+	//
+	// Replaced by Attributes in KMIP 2.0.
+	Attribute []kmip.Attribute `ttlv:",omitempty,version=..v1.4"`
+	// The requested attributes, in KMIP 2.0+.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 }
 
 var _ kmip.OperationPayload = (*GetAttributesResponsePayload)(nil)

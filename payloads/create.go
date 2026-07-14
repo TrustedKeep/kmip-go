@@ -20,7 +20,11 @@ type CreateRequestPayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	TemplateAttribute kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0 in favor of Attributes.
+	TemplateAttribute kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
+	// Attributes carries the object's attributes in KMIP 2.0+, replacing TemplateAttribute.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 }
 
 func (a *CreateRequestPayload) Operation() kmip.Operation {
@@ -37,7 +41,9 @@ type CreateResponsePayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	Attributes *kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0: the Create response returns only the Object Type and Unique Identifier.
+	Attributes *kmip.TemplateAttribute `ttlv:",version=..v1.4"`
 }
 
 func (a *CreateResponsePayload) Operation() kmip.Operation {

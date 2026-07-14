@@ -53,7 +53,11 @@ type RekeyRequestPayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	TemplateAttribute *kmip.TemplateAttribute
+	//
+	// Replaced by Attributes in KMIP 2.0.
+	TemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
+	// Attributes carries the replacement key's attributes in KMIP 2.0+.
+	Attributes kmip.Attributes `ttlv:"Attributes,omitempty,version=v2.0.."`
 }
 
 func (a *RekeyRequestPayload) Operation() kmip.Operation {
@@ -68,7 +72,9 @@ type RekeyResponsePayload struct {
 	//
 	// The Template Managed Object is deprecated as of version 1.3 of this specification and MAY be removed from subsequent versions of the specification.
 	// Individual Attributes SHOULD be used in operations which currently support use of a Name within a Template-Attribute to reference a Template.
-	TemplateAttribute *kmip.TemplateAttribute
+	//
+	// Removed in KMIP 2.0: the response returns only the Unique Identifier.
+	TemplateAttribute *kmip.TemplateAttribute `ttlv:",omitempty,version=..v1.4"`
 }
 
 func (a *RekeyResponsePayload) Operation() kmip.Operation {

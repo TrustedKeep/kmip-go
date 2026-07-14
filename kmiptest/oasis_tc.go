@@ -92,7 +92,7 @@ func LoadTestSuite(t TestingT, root, version, file string) TestSuite {
 	return ts
 }
 
-var TestCaseVersions = []string{"v1.0", "v1.1", "v1.2", "v1.3", "v1.4"}
+var TestCaseVersions = []string{"v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0"}
 
 var UnsupportedTestCases = []string{
 	"v1.0/TC_134_10_Register_Key_Pair_Certify_and_Re_certify_Public_Key.xml",
@@ -111,4 +111,11 @@ var UnsupportedTestCases = []string{
 	"v1.4/TC-DERIVEKEY-1-10.xml",
 	"v1.4/TC-NP-1-14.xml",
 	"v1.4/TC-SJ-1-14.xml",
+
+	// KMIP 2.0: operations/features not yet wired for 2.0. Each un-marks as its
+	// operation gains a 2.0-aware payload.
+	"v2.0/TC-SJ-1-20.xml",
+	"v2.0/TC-SJ-2-20.xml",
+	"v2.0/TC-SJ-3-20.xml",
+	"v2.0/TC-SJ-4-20.xml",
 }

@@ -23,6 +23,9 @@ func (c *Client) Locate() ExecLocate {
 				req:    &payloads.LocateRequestPayload{},
 			},
 			func(lrp **payloads.LocateRequestPayload) *[]kmip.Attribute {
+				if c.usesV2Attributes() {
+					return (*[]kmip.Attribute)(&(*lrp).Attributes)
+				}
 				return &(*lrp).Attribute
 			},
 			func(ae AttributeExecutor[*payloads.LocateRequestPayload, *payloads.LocateResponsePayload, ExecLocate]) ExecLocate {

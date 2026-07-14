@@ -31,7 +31,7 @@ func (c *Client) Rekey(id string) ExecRekey {
 				},
 			},
 			func(lrp **payloads.RekeyRequestPayload) *[]kmip.Attribute {
-				return &(*lrp).TemplateAttribute.Attribute
+				return attrTarget(c, (*lrp).TemplateAttribute, &(*lrp).Attributes)
 			},
 			func(ae AttributeExecutor[*payloads.RekeyRequestPayload, *payloads.RekeyResponsePayload, ExecRekey]) ExecRekey {
 				return ExecRekey{ae}

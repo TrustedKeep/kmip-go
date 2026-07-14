@@ -27,6 +27,12 @@ func getTagByName(name string) (int, error) {
 	return 0, fmt.Errorf("Unknown tag %q", name)
 }
 
+// TagByName returns the tag registered under the given canonical name, or 0 if
+// no such tag is registered.
+func TagByName(name string) int {
+	return tagByName[name]
+}
+
 func getTagName(tag int) string {
 	n := tagNames[tag]
 	return n
